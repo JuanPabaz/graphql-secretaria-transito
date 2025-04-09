@@ -56,7 +56,7 @@ input VehicleRequestInput {
     vehicleType: String!
     licensePlate: String!
     brand: String!
-    registrationDate: String!
+    registrationDate: String
 }
 
 type Query {
