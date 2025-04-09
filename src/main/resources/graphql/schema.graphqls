@@ -1,0 +1,76 @@
+input RegisterRequestInput {
+    fullName: String
+    ownerType: String
+    idNumber: String
+    address: String
+    username: String
+    password: String
+    role: String
+}
+
+input AuthRequestInput {
+    username: String
+    password: String
+}
+
+type AuthResponse {
+    accessToken: String
+    refreshToken: String
+    role: String
+}
+
+type UserResponse {
+    idUsuario: Int
+    nombreCompleto: String
+    cargo: String
+    username: String
+    estadoUsuario: String
+    aniosVinculado: Int
+    role: String
+    idEmpresa: Int
+}
+
+type TrafficTicket {
+    trafficTicketId: Int
+    userId: Int
+    vehicleId: Int
+    licensePlate: String
+    date: String
+    description: String
+    price: Float
+    trafficAgentName: String
+    cameraLocation: String
+}
+
+type Vehicle {
+    vehicleId: Int
+    licensePlate: String
+    brand: String
+    vehicleType: String
+    ownerName: String
+    registrationDate: String
+}
+
+input VehicleRequestInput {
+    userId: Int!
+    vehicleType: String!
+    licensePlate: String!
+    brand: String!
+    registrationDate: String!
+}
+
+type Query {
+    getVehicleByOwnerId(ownerId: Int!): [Vehicle]
+    getTrafficTicketByVehicleId(vehicleId: ID!): [TrafficTicket]
+    getTrafficTicketByUserId(userId: Int!): [TrafficTicket]
+}
+
+type Mutation {
+    saveVehicle(vehicleRequest: VehicleRequestInput!): Vehicle
+    generateInvoicePdf(userId: Int!, trafficTicketId: ID!): String
+    registerUser(registerRequest: RegisterRequestInput!): UserResponse!
+    login(authRequest: AuthRequestInput!): AuthResponse!
+}
+
+
+
