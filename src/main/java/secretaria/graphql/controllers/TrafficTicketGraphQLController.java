@@ -1,6 +1,7 @@
 package secretaria.graphql.controllers;
 
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import secretaria.graphql.dto.TrafficTicketResponseDTO;
@@ -25,6 +26,11 @@ public class TrafficTicketGraphQLController {
     @QueryMapping(name = "getTrafficTicketByVehicleId")
     public List<TrafficTicketResponseDTO> getTrafficTicketsByVehicle(@Argument(name = "vehicleId") Long vehicleId) {
         return trafficTicketService.getTrafficTicketByVehicleId(vehicleId);
+    }
+
+    @MutationMapping(name = "generateInvoicePdf")
+    public String generateInvoicePdf(@Argument("userId") Integer idUser, @Argument("trafficTicketId") Long idTrafficTicket) {
+        return trafficTicketService.generateInvoicePdf(idUser, idTrafficTicket);
     }
 }
 

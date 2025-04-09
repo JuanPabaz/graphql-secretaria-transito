@@ -18,6 +18,7 @@ import secretaria.graphql.repositories.TrafficTicketRepository;
 import secretaria.graphql.utils.InvoiceDetail;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +54,7 @@ public class TrafficTicketService {
         return trafficTicketMapper.mapTrafficTicketList(trafficTicketRepository.findTrafficTicketByUser(userId));
     }
 
-    public ResponseEntity<byte[]> generateInvoicePdf(Integer idUser, Long idTrafficTicket) {
+    public String generateInvoicePdf(Integer idUser, Long idTrafficTicket) {
         Optional<User> userOptional = userService.findUserById(idUser);
         if (userOptional.isEmpty()) {
             throw new BadCreateRequest("El usuario no existe.");
@@ -90,12 +91,8 @@ public class TrafficTicketService {
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
             byte[] pdfBytes = outputStream.toByteArray();
 
-            // Configurar headers para la respuesta HTTP
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("attachment", "factura.pdf");
-
-            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            // Codificar el PDF a Base64
+            return Base64.getEncoder().encodeToString(pdfBytes);
         } catch (JRException e) {
             throw new RuntimeException("Error al generar el PDF", e);
         }
